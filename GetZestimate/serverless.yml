@@ -1,0 +1,61 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: Zillow
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-1
+  profile: remax
+  environment:
+    IMAGES_DIR: ./images/
+    TEXT_SIZE: 50
+    TEXT_PADDING: 40
+    WEBVIEW_URL_DEV: https://m13gd5lt87.execute-api.us-east-1.amazonaws.com/dev/webview
+    WEBVIEW_URL_PROD: https://pqhlm1l1c8.execute-api.us-east-1.amazonaws.com/prod/webview
+
+plugins:
+  - serverless-apigw-binary
+
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
+
+
+functions:
+  GetZestimate:
+    handler: handler.GetZestimate
+    events:
+      - http:
+          path: zillow/GetZestimate
+          method: get
+
+  homeEquityCalculator:
+    handler: homeEquityCalculator.handler
+    events:
+      - http:
+          path: zillow/getHomeEquity
+          method: get
+
+  homeValueEstimate:
+    handler: homeValueEstimate.handler
+    events:
+      - http:
+          path: zillow/getHomeValue
+          method: get  
